@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Academic Management System</title>
+<style>
+  body { font-family: "Times New Roman", serif; text-align: center; margin: 30px 0; }
+  h1 { color: #1a73c9; font-size: 28px; margin-bottom: 18px; }
+  h2 { color: #d9532b; font-size: 20px; }
+  h3 { color: #d9532b; font-size: 16px; margin: 0 0 22px; }
+  a { color: #1a73e8; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .module { display: inline-block; width: 210px; height: 165px; box-sizing: border-box;
+            border: 1px solid #333; padding-top: 38px; }
+  .dot { width: 8px; height: 8px; background: #333; border-radius: 50%; margin: 0 auto 28px; }
+  .module a { font-size: 19px; font-weight: bold; text-decoration: underline; }
+  .module p { color: #888; font-size: 11px; margin: 22px 0 0; }
+
+  form { width: 340px; max-width: 90%; margin: 0 auto; text-align: left; }
+  label { display: block; margin-top: 16px; font-weight: bold; }
+  input, select { width: 100%; padding: 8px; margin-top: 6px; box-sizing: border-box; font-size: 16px; }
+  .err { color: red; font-size: 13px; min-height: 16px; }
+  button { margin-top: 20px; padding: 10px 28px; font-size: 16px; cursor: pointer; }
+  #result { width: 340px; max-width: 90%; margin: 25px auto 0; border: 1px solid #333;
+            padding: 5px 15px 12px; text-align: left; display: none; }
+  #result p { margin: 6px 0; }
+</style>
+</head>
+<body>
+  <h1>Campus Academic Management System</h1>
+
+  <!-- HOME PAGE -->
+  <div class="page active" id="home">
+    <h3>Select a module to continue</h3>
+    <div class="module">
+      <div class="dot"></div>
+      <a href="#student">Student</a>
+      <p>Register and view students</p>
+    </div>
+  </div>
+
+  <!-- STUDENT PAGE -->
+  <div class="page" id="student">
+    <h2>Student Registration</h2>
+    <form id="form" novalidate>
+      <label for="name">Enter Student Name</label>
+      <input type="text" id="name">
+      <div class="err" id="e-name"></div>
+
+      <label for="sid">Enter Student ID</label>
+      <input type="text" id="sid">
+      <div class="err" id="e-sid"></div>
+
+      <label for="course">Course</label>
+      <select id="course">
+        <option value="">-- Select Course --</option>
+        <option>CSE</option>
+        <option>ECE</option>
+        <option>CSIT</option>
+        <option>AIDS</option>
+      </select>
+      <div class="err" id="e-course"></div>
+
+      <label for="sem">Enter Semester</label>
+      <input type="text" id="sem">
+      <div class="err" id="e-sem"></div>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="result">
+      <h3 style="margin-bottom:5px">Student Details</h3>
+      <p><b>Name:</b> <span id="r-name"></span></p>
+      <p><b>Student ID:</b> <span id="r-sid"></span></p>
+      <p><b>Course:</b> <span id="r-course"></span></p>
+      <p><b>Semester:</b> <span id="r-sem"></span></p>
+    </div>
+
+    <p><a href="#home">&larr; Back to modules</a></p>
+  </div>
+
+<script>
+  // simple page switching (works even when opened as a single file)
+  function show() {
+    const id = location.hash === "#student" ? "student" : "home";
+    document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === id));
+  }
+  window.addEventListener("hashchange", show);
+  show();
+
+  const MSG = "DETAILS TO BE FILLED";
+  const fields = ["name", "sid", "course", "sem"];
+
+  document.getElementById("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    let ok = true;
+    fields.forEach(f => {
+      const v = document.getElementById(f).value.trim();
+      document.getElementById("e-" + f).textContent = v ? "" : MSG;
+      if (!v) ok = false;
+    });
+    const box = document.getElementById("result");
+    if (!ok) { box.style.display = "none"; return; }
+    fields.forEach(f => {
+      document.getElementById("r-" + f).textContent = document.getElementById(f).value.trim();
+    });
+    box.style.display = "block";
+  });
+</script>
+</body>
+</html>
